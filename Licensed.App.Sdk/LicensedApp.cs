@@ -88,7 +88,20 @@ public class LicensedApp : IDisposable
     /// <exception cref="JsonException">Thrown when there's an error parsing the JSON response.</exception>
     public async Task<ConnectResponse?> Connect(string license, ConnectOptions? options = null)
     {
-        var response = await RequestManager.Connect(license, options);
+        ConnectResponse? response;
+        try
+        {
+            response = await RequestManager.Connect(license, options);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+        catch (LicensingException)
+        {
+            throw;
+        }
+
         if (response == null)
         {
             // An exception handler dealt with it, as no exception occurred.

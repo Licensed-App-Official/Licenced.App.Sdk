@@ -293,9 +293,7 @@ public class RequestManager
             }
         }
 
-        var connectResponse = await HandleResponse<ConnectResponse>(response, ApiStatus.Ok)
-            ?? throw new JsonException($"The server didn't send correct JSON.");
-
+        var connectResponse = await HandleResponse<ConnectResponse>(response, ApiStatus.Ok) ?? throw new JsonException("The server sent incorrect or poorly formatted JSON content.");
         options.PostConnect?.Invoke(connectResponse);
         return connectResponse;
     }
